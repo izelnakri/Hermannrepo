@@ -6,18 +6,18 @@ n = 8
 # chromosome is a bitstring, 1 means queen, 0 means no queen
 q = [1 for i in range(n)] + [0 for i in range(n*n - n)]
 
-def trans(x,y):
+def trans(x, y):
 	# transform x,y coordinates to flat index
 	return (y*n + x)
 
 def fitness(q):
 	# fitness function is the maximum sum of every
 	maximum = 0
-	f = 0
+	fit = 0
 	# line,
 	for i in range(0,n*n,n):
 		lsum = sum(q[i:i+n])
-		f += 0 if lsum <= 1 else lsum
+		fit += 0 if lsum <= 1 else lsum
 	# column,
 	for y in range(n):
 		csum = 0
@@ -25,7 +25,7 @@ def fitness(q):
 		while index < n*n:
 			csum += q[index]
 			index += n
-		f += 0 if csum <= 1 else csum
+		fit += 0 if csum <= 1 else csum
 	# and diagonal
 	# starting at top
 	for start in range(n):
@@ -36,7 +36,7 @@ def fitness(q):
 			dsum += q[trans(x,y)]
 			x += 1
 			y += 1
-		f += 0 if dsum <= 1 else dsum
+		fit += 0 if dsum <= 1 else dsum
 		x = 0
 		y = start
 		dsum = 0
@@ -44,7 +44,7 @@ def fitness(q):
 			dsum += q[trans(x,y)]
 			x += 1
 			y -= 1
-		f += 0 if dsum <= 1 else dsum
+		fit += 0 if dsum <= 1 else dsum
 		x = start
 		y = n-1
 		dsum = 0
@@ -52,7 +52,7 @@ def fitness(q):
 			dsum += q[trans(x,y)]
 			x += 1
 			y -= 1
-		f += 0 if dsum <= 1 else dsum
+		fit += 0 if dsum <= 1 else dsum
 		x = start
 		y = n-1
 		dsum = 0
@@ -60,8 +60,8 @@ def fitness(q):
 			dsum += q[trans(x,y)]
 			x -= 1
 			y -= 1
-		f += 0 if dsum <= 1 else dsum
-	return f
+		fit += 0 if dsum <= 1 else dsum
+	return fit
 
 def randomqueen(q):
 	# get the index of a random queen
@@ -74,24 +74,24 @@ def randomqueen(q):
 
 def mutate(q):
 	# move a random queen in a random direction
-	newboard = copy(q)
-	rq = randomqueen(newboard)
-	dir = [1,-1,n,-n,+1,-(n+1),n-1,-(n-1)][randint(0,7)]
-	while newboard[(rq + dir) % (n*n)] == 1:
-		dir = [1,-1,n,-n,+1,-(n+1),n-1,-(n-1)][randint(0,7)]
-	newboard[rq] = 0
-	newboard[(rq+dir)%(n*n)] = 1
-	return newboard
+	new_board = copy(q)
+	random_queen = randomqueen(new_board)
+	direction = [1,-1,n,-n,+1,-(n+1),n-1,-(n-1)][randint(0,7)]
+	while new_board[(random_queen + direction) % (n*n)] == 1:
+		direction = [1,-1,n,-n,+1,-(n+1),n-1,-(n-1)][randint(0,7)]
+	new_board[random_queen] = 0
+	new_board[(random_queen+direction)%(n*n)] = 1
+	return new_board
 
 def crossover(q1, q2):
 	# "add" both bords and remove random queens
 	# until there are only n left.
-	nb = []
+	new_board = []
 	for i in range(n*n):
-		nb.append(int(q1[i] or q2[i]))
-	while sum(nb) != n:
-		nb[randomqueen(nb)] = 0
-	return nb	
+		new_board.append(int(q1[i] or q2[i]))
+	while sum(new_board) != n:
+		new_board[randomqueen(new_board)] = 0
+	return new_board
 
 population = [(q,fitness(q))]
 print(fitness(q))
