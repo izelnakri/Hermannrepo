@@ -109,7 +109,7 @@ while True:
 
 	newpop = []
 	for i in range(10):
-		for rr in range(7):
+		for rr in range(9):
 			m = mutate(population[i][0])
 			f = fitness(m)
 			if f == 0:
@@ -118,14 +118,14 @@ while True:
 					print(m[x:x+n])
 				sys.exit()
 			newpop.append((m,f))
-	for r in range(30):
+	for r in range(10):
 		m = crossover(population[randint(0,10)][0], population[randint(0,10)][0])
 		f = fitness(m)
 		if f == 0:
 			print("found solution in generation",str(generation) + ": ")
+			for x in range(0,n*n,n):
+				print(m[x:x+n])
 			sys.exit()
-		for x in range(0,n*n,n):
-			print(m[x:x+n])
-		print()
 		newpop.append((m,f))
 	population = newpop
+
